@@ -298,6 +298,7 @@ void SendProc(Session* pSession)
 
             Logf(L"%s:%d(%d) send() err: %d", pSession->IP, pSession->Port, pSession->ID, err1);
             Disconnect(pSession);
+            break;
         }
 
         retMove = pSession->SendQue.MoveFront(retSend);
@@ -340,6 +341,9 @@ void SendBroadcast(Session* pToExcludeOrNull, void* data)
 
 void Disconnect(Session* pSession)
 {
+    if (pSession->IsDisconnected)
+        return;
+
     pSession->IsDisconnected = true;
 
     Msg_DeleteStar msgDeleteStar{};
